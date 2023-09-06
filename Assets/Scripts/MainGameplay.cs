@@ -10,6 +10,8 @@ public class MainGameplay : MonoBehaviour
 {
     public BehaviorTree BehaviorTree;
     public Weapon Weapon;
+    public Collider2D SpawnAreaCollider;
+    public GameObject RocksPrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -53,6 +55,9 @@ public class MainGameplay : MonoBehaviour
         SetTrigger attack = new SetTrigger { triggerName = "Attack" };
         sequence2.Children.Add(attack);
 
+        Wait waitShoot = new Wait { Timer = 0.3f };
+        sequence2.Children.Add(waitShoot);
+
         Shoot shoot = new Shoot();
         Weapon weapon = Weapon;
         shoot.shakeCamera = true;
@@ -60,11 +65,34 @@ public class MainGameplay : MonoBehaviour
 
         sequence2.Children.Add(shoot);
 
-        Wait wait2 = new Wait { Timer = 1.2f };
+        SpawnFallingRocks rocks = new SpawnFallingRocks();
+        rocks.rockPrefab = RocksPrefab.GetComponent<AbstractProjectile>();
+        rocks.spawnAreaCollider = SpawnAreaCollider;
+        sequence2.Children.Add(rocks);
+
+
+        Wait wait2 = new Wait { Timer = 3 };
         sequence2.Children.Add(wait2);
 
         Repeater repeater = new Repeater();
-        repeater.Children.Add(sequence2);
+
+        RandomSelector selector = new RandomSelector();
+        selector.Children.Add(sequence);
+        selector.Children.Add(sequence2);
+
+
+
+
+        Selector initialSelector = new Selector();
+        Sequence nextStep = new Sequence();
+        IsHealthUnder health = new IsHealthUnder();
+        nextStep.Children.Add(health);
+        initialSelector.Children.Add(nextStep);
+        initialSelector.Children.Add(selector);
+
+        repeater.Children.Add(initialSelector);
+
+
 
         root.Children.Add(repeater);
 

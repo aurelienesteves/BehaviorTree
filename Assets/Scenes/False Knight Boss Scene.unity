@@ -1844,9 +1844,11 @@ MonoBehaviour:
   BehaviorTree: {fileID: 929588902}
   Weapon:
     weaponTransform: {fileID: 414289934}
-    projectilePrefab: {fileID: 1380002183917242875, guid: c1025daebf7cb5147a35828cf5c99a00, type: 3}
+    projectilePrefab: {fileID: 3999754718482582965, guid: 15c80a6f77e98844da34bdf25a6b30d3, type: 3}
     horizontalForce: 1
     verticalForce: 0
+  SpawnAreaCollider: {fileID: 1712115922}
+  RocksPrefab: {fileID: 7935544742682990417, guid: c1025daebf7cb5147a35828cf5c99a00, type: 3}
 --- !u!4 &1677916996
 Transform:
   m_ObjectHideFlags: 0
