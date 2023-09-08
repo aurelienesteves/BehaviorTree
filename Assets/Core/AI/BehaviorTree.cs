@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 namespace Core.AI
 {
@@ -7,10 +8,11 @@ namespace Core.AI
         public TreeNode Root { get; set; }
 
         TreeNode _currentNode;
+        Dictionary<string, float> _blackboard;
 
         private void Awake()
         {
-           
+            _blackboard = new Dictionary<string, float>();
         }
 
         private void Update()
@@ -23,6 +25,18 @@ namespace Core.AI
             {
                 Root.Update(this, gameObject);
             }
+        }
+
+        public void WriteBlackboard(string name , float value)
+        {
+            _blackboard[name] = value;
+        }
+
+        public float ReadBlackboard(string name)
+        {
+            if (_blackboard.TryGetValue(name, out float value))
+                return value;
+            return 0;
         }
 
 

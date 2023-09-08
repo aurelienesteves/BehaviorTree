@@ -11,7 +11,10 @@ public class MainGameplay : MonoBehaviour
     public BehaviorTree BehaviorTree;
     public Weapon Weapon;
     public Collider2D SpawnAreaCollider;
+    public GameObject DamageCollider;
     public GameObject RocksPrefab;
+    public GameObject MaggotPrefab;
+    public Transform MaggotTransform;
 
     // Start is called before the first frame update
     void Start()
@@ -86,13 +89,45 @@ public class MainGameplay : MonoBehaviour
         Selector initialSelector = new Selector();
         Sequence nextStep = new Sequence();
         IsHealthUnder health = new IsHealthUnder();
+        SetBlackboard blackboard = new SetBlackboard();
+        blackboard.Name = "BossStep";
+        blackboard.Value = 1;
+        
         nextStep.Children.Add(health);
+        nextStep.Children.Add(blackboard);
+
         initialSelector.Children.Add(nextStep);
         initialSelector.Children.Add(selector);
 
-        repeater.Children.Add(initialSelector);
+        Selector stepSelector = new Selector();
+        Sequence sequenceStep1 = new Sequence();
 
+        CheckBlackboard checkStep = new CheckBlackboard();
+        checkStep.Value = 1;
+        checkStep.Name = "BossStep";
 
+        sequenceStep1.Children.Add(checkStep);
+
+        Jump recoverJump = new Jump();
+        recoverJump.horizontalForce = -4;
+        recoverJump.jumpForce = 10;
+        recoverJump.animationTriggerName = "Roll";
+
+        Wait waitJump = new Wait { Timer = 1.0f };
+
+        SpawnAndWaitDead spawnMaggot = new SpawnAndWaitDead();
+        spawnMaggot.DamageCollider = DamageCollider;
+        spawnMaggot.Prefab = MaggotPrefab;
+        spawnMaggot.Transform = MaggotTransform;
+
+        sequenceStep1.Children.Add(recoverJump);
+        sequenceStep1.Children.Add(waitJump);
+        sequenceStep1.Children.Add(spawnMaggot);
+
+        stepSelector.Children.Add(sequenceStep1);
+        stepSelector.Children.Add(initialSelector);
+
+        repeater.Children.Add(stepSelector);
 
         root.Children.Add(repeater);
 

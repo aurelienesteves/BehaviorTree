@@ -24,7 +24,6 @@ namespace Core.AI
 
             if (_currentTime < Timer)
                 return TreeNodeState.Running;
-            Debug.Log($"Wait {Timer}");
 
             return TreeNodeState.Success;
         }

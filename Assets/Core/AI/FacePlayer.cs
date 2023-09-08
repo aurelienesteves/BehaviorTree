@@ -9,8 +9,6 @@ namespace Core.AI
     {
         private float? baseScaleX;
 
- 
-
         public override TreeNodeState Update(BehaviorTree tree, GameObject owner)
         {
             if ( baseScaleX == null )

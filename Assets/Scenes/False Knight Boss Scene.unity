@@ -1848,7 +1848,10 @@ MonoBehaviour:
     horizontalForce: 1
     verticalForce: 0
   SpawnAreaCollider: {fileID: 1712115922}
+  DamageCollider: {fileID: 1382244542}
   RocksPrefab: {fileID: 7935544742682990417, guid: c1025daebf7cb5147a35828cf5c99a00, type: 3}
+  MaggotPrefab: {fileID: 1012258441299047305, guid: 486e43c11b2bd584992a6c09819d5500, type: 3}
+  MaggotTransform: {fileID: 1515090380}
 --- !u!4 &1677916996
 Transform:
   m_ObjectHideFlags: 0
