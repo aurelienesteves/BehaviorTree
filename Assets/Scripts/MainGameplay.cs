@@ -100,6 +100,20 @@ public class MainGameplay : MonoBehaviour
         initialSelector.Children.Add(selector);
 
         Selector stepSelector = new Selector();
+
+
+        Sequence sequenceStep2 = new Sequence();
+
+        CheckBlackboard checkStep2 = new CheckBlackboard();
+        checkStep2.Value = 2;
+        checkStep2.Name = "BossStep";
+
+        Log log = new Log { Text = "Step2" };
+
+        sequenceStep2.Children.Add(checkStep2);
+        sequenceStep2.Children.Add(log);
+
+
         Sequence sequenceStep1 = new Sequence();
 
         CheckBlackboard checkStep = new CheckBlackboard();
@@ -120,10 +134,16 @@ public class MainGameplay : MonoBehaviour
         spawnMaggot.Prefab = MaggotPrefab;
         spawnMaggot.Transform = MaggotTransform;
 
+        SetBlackboard step2 = new SetBlackboard();
+        step2.Name = "BossStep";
+        step2.Value = 2;
+
         sequenceStep1.Children.Add(recoverJump);
         sequenceStep1.Children.Add(waitJump);
         sequenceStep1.Children.Add(spawnMaggot);
+        sequenceStep1.Children.Add(step2);
 
+        stepSelector.Children.Add(sequenceStep2);
         stepSelector.Children.Add(sequenceStep1);
         stepSelector.Children.Add(initialSelector);
 
