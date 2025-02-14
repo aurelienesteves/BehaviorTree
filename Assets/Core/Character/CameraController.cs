@@ -1,4 +1,5 @@
-﻿using Pixelplacement;
+﻿using DG.Tweening;
+using Pixelplacement;
 using UnityEngine;
 
 namespace Core.Character
@@ -91,7 +92,8 @@ namespace Core.Character
 
         public void ShakeCamera(float strength, float duration = 1.0f)
         {
-            Tween.Shake(transform, transform.localPosition, new Vector3(strength, strength, 0), duration, 0);
+            transform.DOComplete();
+            transform.DOShakePosition(duration, 1,30);//  transform.localPosition, new Vector3(strength, strength, 0) , 0);
         }
     }
 }

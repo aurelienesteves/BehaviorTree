@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace Core.Combat.Projectiles
 {
@@ -9,9 +10,10 @@ namespace Core.Combat.Projectiles
         private Vector3 direction;
         private Vector3 velocity;
 
-        private void Start()
+        private IEnumerator Start()
         {
-            Invoke(nameof(DestroyProjectile), 6.0f);
+            yield return new WaitForSeconds(6);
+            DestroyProjectile();
         }
 
         public override void SetForce(Vector2 force)

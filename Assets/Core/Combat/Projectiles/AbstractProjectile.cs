@@ -10,6 +10,7 @@ namespace Core.Combat.Projectiles
         public float damage;
         public ParticleSystem explosionEffect;
         public AudioClip splatterSound;
+        public bool DestroyHit;
 
         public GameObject Shooter { get; set; }
 
@@ -45,7 +46,8 @@ namespace Core.Combat.Projectiles
                 player.Hurt((int)damage, force * 300.0f);
             }
         
-            DestroyProjectile();
+            if (DestroyHit)
+                DestroyProjectile();
         }
     }
 }

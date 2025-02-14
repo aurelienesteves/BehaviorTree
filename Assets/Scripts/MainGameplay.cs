@@ -16,140 +16,155 @@ public class MainGameplay : MonoBehaviour
     public GameObject MaggotPrefab;
     public Transform MaggotTransform;
 
-    // Start is called before the first frame update
     void Start()
     {
         CreateBehavior();
     }
 
-    private void CreateBehavior()
+
+    TreeNode SequenceFallingAttack()
     {
-        TreeNode root = new TreeNode();
-        root.Children = new List<TreeNode>();
+        Repeater repeater = new Repeater { RepeatCount = 8 };
         Sequence sequence = new Sequence();
-
-        Wait wait = new Wait();
-        wait.Timer = 1.3f;
-        sequence.Children.Add(wait);
-
-        Jump jump = new Jump();
-        jump.horizontalForce = 3;
-        jump.jumpForce = 20;
-        jump.buildupTime = 0.5f;
-        jump.jumpTime = 1.3f;
-        jump.animationTriggerName = "Jump";
-        jump.shakeCameraOnLanding = true;
-        sequence.Children.Add(jump);
-
-        FacePlayer face = new FacePlayer();
-        sequence.Children.Add(face);
-
-
-
-
-        Sequence sequence2 = new Sequence();
-
-        SetTrigger startAttack = new SetTrigger { triggerName = "StartAttack" };
-        sequence2.Children.Add(startAttack);
-
-        Wait waitAttack = new Wait {  Timer = 1.2f };
-        sequence2.Children.Add(waitAttack);
-
-        SetTrigger attack = new SetTrigger { triggerName = "Attack" };
-        sequence2.Children.Add(attack);
-
-        Wait waitShoot = new Wait { Timer = 0.3f };
-        sequence2.Children.Add(waitShoot);
-
-        Shoot shoot = new Shoot();
-        Weapon weapon = Weapon;
-        shoot.shakeCamera = true;
-        shoot.weapons.Add(weapon);
-
-        sequence2.Children.Add(shoot);
 
         SpawnFallingRocks rocks = new SpawnFallingRocks();
         rocks.rockPrefab = RocksPrefab.GetComponent<AbstractProjectile>();
         rocks.spawnAreaCollider = SpawnAreaCollider;
-        sequence2.Children.Add(rocks);
+        sequence.Children.Add(rocks);
+
+        SetTrigger attack = new SetTrigger { triggerName = "Attack" };
+        sequence.Children.Add(attack);
+
+        sequence.Children.Add(new Wait { Timer = 0.6f });
+        sequence.Children.Add(new ChangeDirection());
+
+        repeater.Children.Add(sequence);
+
+        return repeater;
+    }
 
 
-        Wait wait2 = new Wait { Timer = 3 };
-        sequence2.Children.Add(wait2);
+    private void CreateBehavior()
+    {
+        TreeNode root = new TreeNode();
+        root.Children = new List<TreeNode>();
 
-        Repeater repeater = new Repeater();
+        root.Children.Add(SequenceFallingAttack());
+        //Sequence sequence = new Sequence();
 
-        RandomSelector selector = new RandomSelector();
-        selector.Children.Add(sequence);
-        selector.Children.Add(sequence2);
+        //Wait wait = new Wait();
+        //wait.Timer = 1.3f;
+        //sequence.Children.Add(wait);
 
+        //Jump jump = new Jump();
+        //jump.horizontalForce = 3;
+        //jump.jumpForce = 20;
+        //jump.buildupTime = 0.5f;
+        //jump.jumpTime = 1.3f;
+        //jump.animationTriggerName = "Jump";
+        //jump.shakeCameraOnLanding = true;
+        //sequence.Children.Add(jump);
 
-
-
-        Selector initialSelector = new Selector();
-        Sequence nextStep = new Sequence();
-        IsHealthUnder health = new IsHealthUnder();
-        SetBlackboard blackboard = new SetBlackboard();
-        blackboard.Name = "BossStep";
-        blackboard.Value = 1;
-        
-        nextStep.Children.Add(health);
-        nextStep.Children.Add(blackboard);
-
-        initialSelector.Children.Add(nextStep);
-        initialSelector.Children.Add(selector);
-
-        Selector stepSelector = new Selector();
+        //FacePlayer face = new FacePlayer();
+        //sequence.Children.Add(face);
 
 
-        Sequence sequenceStep2 = new Sequence();
+        //Sequence sequence2 = new Sequence();
 
-        CheckBlackboard checkStep2 = new CheckBlackboard();
-        checkStep2.Value = 2;
-        checkStep2.Name = "BossStep";
+        //SetTrigger startAttack = new SetTrigger { triggerName = "StartAttack" };
+        //sequence2.Children.Add(startAttack);
 
-        Log log = new Log { Text = "Step2" };
+        //Wait waitAttack = new Wait { Timer = 1.2f };
+        //sequence2.Children.Add(waitAttack);
 
-        sequenceStep2.Children.Add(checkStep2);
-        sequenceStep2.Children.Add(log);
+        //SetTrigger attack = new SetTrigger { triggerName = "Attack" };
+        //sequence2.Children.Add(attack);
 
+        //Wait waitShoot = new Wait { Timer = 0.3f };
+        //sequence2.Children.Add(waitShoot);
 
-        Sequence sequenceStep1 = new Sequence();
+        //Shoot shoot = new Shoot();
+        //Weapon weapon = Weapon;
+        //shoot.shakeCamera = true;
+        //shoot.weapons.Add(weapon);
 
-        CheckBlackboard checkStep = new CheckBlackboard();
-        checkStep.Value = 1;
-        checkStep.Name = "BossStep";
+        //sequence2.Children.Add(shoot);
 
-        sequenceStep1.Children.Add(checkStep);
+        //SpawnFallingRocks rocks = new SpawnFallingRocks();
+        //rocks.rockPrefab = RocksPrefab.GetComponent<AbstractProjectile>();
+        //rocks.spawnAreaCollider = SpawnAreaCollider;
+        //sequence2.Children.Add(rocks);
 
-        Jump recoverJump = new Jump();
-        recoverJump.horizontalForce = -4;
-        recoverJump.jumpForce = 10;
-        recoverJump.animationTriggerName = "Roll";
+        //Wait wait2 = new Wait { Timer = 3 };
+        //sequence2.Children.Add(wait2);
 
-        Wait waitJump = new Wait { Timer = 1.0f };
+        //Repeater repeater = new Repeater();
 
-        SpawnAndWaitDead spawnMaggot = new SpawnAndWaitDead();
-        spawnMaggot.DamageCollider = DamageCollider;
-        spawnMaggot.Prefab = MaggotPrefab;
-        spawnMaggot.Transform = MaggotTransform;
+        //RandomSelector selector = new RandomSelector();
+        //selector.Children.Add(sequence);
+        //selector.Children.Add(sequence2);
 
-        SetBlackboard step2 = new SetBlackboard();
-        step2.Name = "BossStep";
-        step2.Value = 2;
+        //Selector initialSelector = new Selector();
+        //Sequence nextStep = new Sequence();
+        //IsHealthUnder health = new IsHealthUnder();
+        //SetBlackboard blackboard = new SetBlackboard();
+        //blackboard.Name = "BossStep";
+        //blackboard.Value = 1;
 
-        sequenceStep1.Children.Add(recoverJump);
-        sequenceStep1.Children.Add(waitJump);
-        sequenceStep1.Children.Add(spawnMaggot);
-        sequenceStep1.Children.Add(step2);
+        //nextStep.Children.Add(health);
+        //nextStep.Children.Add(blackboard);
 
-        stepSelector.Children.Add(sequenceStep2);
-        stepSelector.Children.Add(sequenceStep1);
-        stepSelector.Children.Add(initialSelector);
+        //initialSelector.Children.Add(nextStep);
+        //initialSelector.Children.Add(selector);
 
-        repeater.Children.Add(stepSelector);
+        //Selector stepSelector = new Selector();
+        //Sequence sequenceStep2 = new Sequence();
 
-        root.Children.Add(repeater);
+        //CheckBlackboard checkStep2 = new CheckBlackboard();
+        //checkStep2.Value = 2;
+        //checkStep2.Name = "BossStep";
+
+        //Log log = new Log { Text = "Step2" };
+
+        //sequenceStep2.Children.Add(checkStep2);
+        //sequenceStep2.Children.Add(log);
+
+        //Sequence sequenceStep1 = new Sequence();
+
+        //CheckBlackboard checkStep = new CheckBlackboard();
+        //checkStep.Value = 1;
+        //checkStep.Name = "BossStep";
+
+        //sequenceStep1.Children.Add(checkStep);
+
+        //Jump recoverJump = new Jump();
+        //recoverJump.horizontalForce = -4;
+        //recoverJump.jumpForce = 10;
+        //recoverJump.animationTriggerName = "Roll";
+
+        //Wait waitJump = new Wait { Timer = 1.0f };
+
+        //SpawnAndWaitDead spawnMaggot = new SpawnAndWaitDead();
+        //spawnMaggot.DamageCollider = DamageCollider;
+        //spawnMaggot.Prefab = MaggotPrefab;
+        //spawnMaggot.Transform = MaggotTransform;
+
+        //SetBlackboard step2 = new SetBlackboard();
+        //step2.Name = "BossStep";
+        //step2.Value = 2;
+
+        //sequenceStep1.Children.Add(recoverJump);
+        //sequenceStep1.Children.Add(waitJump);
+        //sequenceStep1.Children.Add(spawnMaggot);
+        //sequenceStep1.Children.Add(step2);
+
+        //stepSelector.Children.Add(sequenceStep2);
+        //stepSelector.Children.Add(sequenceStep1);
+        //stepSelector.Children.Add(initialSelector);
+
+        //repeater.Children.Add(stepSelector);
+
+        // root.Children.Add(repeater);
 
         BehaviorTree.Root = root;
     }
@@ -157,6 +172,6 @@ public class MainGameplay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

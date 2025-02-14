@@ -12,10 +12,9 @@ namespace Core.AI
 
         public override TreeNodeState Update(BehaviorTree tree, GameObject owner)
         {
-            
             foreach (var weapon in weapons)
             {
-                var projectile = Object.Instantiate(weapon.projectilePrefab, weapon.weaponTransform.position,
+                var projectile = Object.Instantiate(weapon.projectilePrefab, weapon.weaponTransform.position + weapon.Offset,
                     Quaternion.identity);
                 projectile.Shooter = owner;
 
