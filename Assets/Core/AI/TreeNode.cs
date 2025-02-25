@@ -8,6 +8,11 @@ namespace Core.AI
     {
         public List<TreeNode> Children { get; set; }
 
+        public void Add(TreeNode node)
+        {
+            Children.Add(node);
+        }
+
 
         public virtual TreeNodeState Update(BehaviorTree tree, GameObject owner)
         {

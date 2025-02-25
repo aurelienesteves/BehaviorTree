@@ -11,9 +11,9 @@ namespace Core.AI
 
         public override TreeNodeState Update(BehaviorTree tree, GameObject owner)
         {
-            if ( baseScaleX == null )
+            if (baseScaleX == null)
             {
-                baseScaleX = owner.transform.localScale.x;
+                baseScaleX = Mathf.Abs( owner.transform.localScale.x);
             }
 
             GameObject player = GameObject.FindGameObjectWithTag("Player");

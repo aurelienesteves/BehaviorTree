@@ -30,15 +30,15 @@ public class MainGameplay : MonoBehaviour
         SpawnFallingRocks rocks = new SpawnFallingRocks();
         rocks.rockPrefab = RocksPrefab.GetComponent<AbstractProjectile>();
         rocks.spawnAreaCollider = SpawnAreaCollider;
-        sequence.Children.Add(rocks);
+        sequence.Add(rocks);
 
         SetTrigger attack = new SetTrigger { triggerName = "Attack" };
-        sequence.Children.Add(attack);
+        sequence.Add(attack);
 
-        sequence.Children.Add(new Wait { Timer = 0.6f });
-        sequence.Children.Add(new ChangeDirection());
+        sequence.Add(new Wait { Timer = 0.6f });
+        sequence.Add(new ChangeDirection());
 
-        repeater.Children.Add(sequence);
+        repeater.Add(sequence);
 
         return repeater;
     }
@@ -58,6 +58,8 @@ public class MainGameplay : MonoBehaviour
 
         FacePlayer face = new FacePlayer();
         sequence.Children.Add(face);
+
+        sequence.Add(new Wait { Timer = 3});
 
         return sequence;
     }
@@ -163,10 +165,10 @@ public class MainGameplay : MonoBehaviour
         step2.Name = "BossStep";
         step2.Value = step;
 
-        sequence.Children.Add(recoverJump);
-        sequence.Children.Add(waitJump);
-        sequence.Children.Add(spawnMaggot);
-        sequence.Children.Add(step2);
+        sequence.Add(recoverJump);
+        sequence.Add(waitJump);
+        sequence.Add(spawnMaggot);
+        sequence.Add(step2);
 
         return sequence;
     }
@@ -174,25 +176,52 @@ public class MainGameplay : MonoBehaviour
     TreeNode SequenceIntro()
     {
         Sequence sequence = new Sequence();
-        sequence.Children.Add(new FacePlayer());
+        sequence.Add(new FacePlayer());
         Jump jump = new Jump();
         jump.horizontalForce = 0;
         jump.jumpForce = 15;
         jump.jumpTime = 1.4f;
         jump.animationTriggerName = "Jump";
         jump.shakeCameraOnLanding = true;
-        sequence.Children.Add(jump);
+        sequence.Add(jump);
         return sequence;
     }
 
-        private void CreateBehavior()
+
+    TreeNode SequencePhase1()
+    {
+        Sequence sequence = new Sequence();
+        sequence.Add(SequenceLittleAttack());
+        sequence.Add(new Wait { Timer = 1 });
+        sequence.Add(SequenceJumpAttack());
+
+        return sequence;
+    }
+
+    private void CreateBehavior()
     {
         TreeNode root = new TreeNode();
         root.Children = new List<TreeNode>();
         var sequence = SequenceIntro();
-      //  sequence.Children.Insert(0, new Wait { Timer = 2 });
+        sequence.Add(new Wait { Timer = 1 });
+        Repeater repeater = new Repeater();
+        sequence.Add(repeater);
 
-        root.Children.Add(sequence);
+
+        Sequence sequenceCheckPhase2 = new Sequence();
+        sequenceCheckPhase2.Add(  new IsHealthUnder { HealthTreshold = 10 } );
+        sequenceCheckPhase2.Add(SequenceToNextStep(1));
+
+
+        Selector selector = new Selector();
+        selector.Add(sequenceCheckPhase2);
+        selector.Add(SequencePhase1());
+
+        repeater.Add(selector);
+
+
+
+        root.Add(sequence);
         //Sequence sequence = new Sequence();
 
         //Wait wait = new Wait();
