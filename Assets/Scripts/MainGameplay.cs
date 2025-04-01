@@ -204,14 +204,11 @@ public class MainGameplay : MonoBehaviour
         Sequence sequence = new Sequence();
         sequence.Add(SequenceMiddleAttack());
         sequence.Add(new WaitOrhealthUnder { HealthTreshold = 0, Timer = 2 });
-        sequence.Add(new Log { Text = "A" });
 
 
         sequence.Add(SequenceFallingAttack());
         sequence.Add(new WaitOrhealthUnder { HealthTreshold = 0, Timer = 2 });
-        sequence.Add(new Log { Text = "1" });
         sequence.Add(SequenceJumpAttack());
-        sequence.Add(new Log { Text = "2" });
 
         return sequence;
     }
