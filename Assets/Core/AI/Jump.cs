@@ -1,4 +1,5 @@
 ﻿using Core.Character;
+using Core.Combat;
 using DG.Tweening;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -50,6 +51,8 @@ namespace Core.AI
         {
             if (_initialized == false)
             {
+                owner.GetComponent<Destructable>().Invincible = true;
+
                 _initialized = true;
                 buildupTween = DOVirtual.DelayedCall(buildupTime, () => StartJump(owner), false);
                 owner.GetComponentInChildren<Animator>().SetTrigger(animationTriggerName);
@@ -60,6 +63,8 @@ namespace Core.AI
                 buildupTween?.Kill();
                 jumpTween?.Kill();
                 hasLanded = false;
+                owner.GetComponent<Destructable>().Invincible = false;
+
 
                 return TreeNodeState.Success;
             }

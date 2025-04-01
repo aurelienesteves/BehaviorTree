@@ -81,7 +81,7 @@ namespace Core.Combat
                 if (customHitEffect != null)
                     EffectManager.Instance.PlayOneShot(customHitEffect, position);
 
-                CameraController.Instance.ShakeCamera(0.03f, 0.5f);
+                CameraController.Instance.ShakeCamera(1, 1);
             }
 
             if (customHitSound != null)

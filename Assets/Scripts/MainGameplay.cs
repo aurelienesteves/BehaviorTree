@@ -1,8 +1,6 @@
 using Core.AI;
 using Core.Combat;
 using Core.Combat.Projectiles;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -59,7 +57,7 @@ public class MainGameplay : MonoBehaviour
         FacePlayer face = new FacePlayer();
         sequence.Children.Add(face);
 
-        sequence.Add(new Wait { Timer = 3});
+        sequence.Add(new WaitOrhealthUnder { HealthTreshold = 0, Timer = 1 });
 
         return sequence;
     }
@@ -74,7 +72,7 @@ public class MainGameplay : MonoBehaviour
         SetTrigger startAttack = new SetTrigger { triggerName = "StartAttack" };
         sequence.Children.Add(startAttack);
 
-        Wait waitAttack = new Wait { Timer = 1.2f };
+        WaitOrhealthUnder waitAttack = new WaitOrhealthUnder { HealthTreshold = 0, Timer = 1.2f };
         sequence.Children.Add(waitAttack);
 
         SetTrigger attack = new SetTrigger { triggerName = "Attack" };
@@ -154,7 +152,7 @@ public class MainGameplay : MonoBehaviour
         recoverJump.jumpForce = 10;
         recoverJump.animationTriggerName = "Roll";
 
-        Wait waitJump = new Wait { Timer = 0.7f };
+        Wait waitJump = new Wait { Timer = 0.6f };
 
         SpawnAndWaitDead spawnMaggot = new SpawnAndWaitDead();
         spawnMaggot.DamageCollider = DamageCollider;
@@ -169,6 +167,9 @@ public class MainGameplay : MonoBehaviour
         sequence.Add(waitJump);
         sequence.Add(spawnMaggot);
         sequence.Add(step2);
+        sequence.Add(new SetHealth { Health = 30 });
+        sequence.Children.Add(new SetTrigger { triggerName = "Recover" });
+
 
         return sequence;
     }
@@ -192,11 +193,67 @@ public class MainGameplay : MonoBehaviour
     {
         Sequence sequence = new Sequence();
         sequence.Add(SequenceLittleAttack());
-        sequence.Add(new Wait { Timer = 1 });
+        sequence.Add(new WaitOrhealthUnder { HealthTreshold = 0, Timer = 1 });
         sequence.Add(SequenceJumpAttack());
 
         return sequence;
     }
+
+    TreeNode SequencePhase2()
+    {
+        Sequence sequence = new Sequence();
+        sequence.Add(SequenceMiddleAttack());
+        sequence.Add(new WaitOrhealthUnder { HealthTreshold = 0, Timer = 2 });
+        sequence.Add(new Log { Text = "A" });
+
+
+        sequence.Add(SequenceFallingAttack());
+        sequence.Add(new WaitOrhealthUnder { HealthTreshold = 0, Timer = 2 });
+        sequence.Add(new Log { Text = "1" });
+        sequence.Add(SequenceJumpAttack());
+        sequence.Add(new Log { Text = "2" });
+
+        return sequence;
+    }
+
+
+    TreeNode SequenceAllPhase1()
+    {
+        Sequence sequence = new Sequence();
+        sequence.Add(new CheckBlackboard { Name = "BossStep", Value = 0 });
+
+        Selector selector = new Selector();
+        Sequence sequenceCheck = new Sequence();
+        sequenceCheck.Add(new IsHealthUnder { HealthTreshold = 0 });
+        sequenceCheck.Add(SequenceToNextStep(1));
+        selector.Add(sequenceCheck);
+        selector.Add(SequencePhase1());
+
+        sequence.Add(selector);
+
+        return sequence;
+    }
+
+    TreeNode SequenceAllPhase2()
+    {
+        Sequence sequence = new Sequence();
+        sequence.Add(new CheckBlackboard { Name = "BossStep", Value = 1 });
+
+        Selector selector = new Selector();
+        Sequence sequenceCheck = new Sequence();
+        sequenceCheck.Add(new IsHealthUnder { HealthTreshold = 0 });
+        sequenceCheck.Add(SequenceToNextStep(2));
+        selector.Add(sequenceCheck);
+        selector.Add(SequencePhase2());
+
+        sequence.Add(selector);
+
+        return sequence;
+    }
+
+
+
+
 
     private void CreateBehavior()
     {
@@ -207,19 +264,12 @@ public class MainGameplay : MonoBehaviour
         Repeater repeater = new Repeater();
         sequence.Add(repeater);
 
-
-        Sequence sequenceCheckPhase2 = new Sequence();
-        sequenceCheckPhase2.Add(  new IsHealthUnder { HealthTreshold = 10 } );
-        sequenceCheckPhase2.Add(SequenceToNextStep(1));
-
-
         Selector selector = new Selector();
-        selector.Add(sequenceCheckPhase2);
-        selector.Add(SequencePhase1());
+        selector.Add(SequenceAllPhase1());
+        selector.Add(SequenceAllPhase2());
 
+        // sequenceCheckPhase1.Add(selector);
         repeater.Add(selector);
-
-
 
         root.Add(sequence);
         //Sequence sequence = new Sequence();
@@ -228,8 +278,6 @@ public class MainGameplay : MonoBehaviour
         //wait.Timer = 1.3f;
         //sequence.Children.Add(wait);
 
-
-      
 
         //Repeater repeater = new Repeater();
 

@@ -40,6 +40,10 @@ namespace Core.Combat
 
         public void Revive()
         {
+        }
+
+        internal void SetHealth(int health)
+        {
             CurrentHealth = health;
         }
     }

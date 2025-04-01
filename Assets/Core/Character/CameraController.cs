@@ -93,7 +93,7 @@ namespace Core.Character
         public void ShakeCamera(float strength, float duration = 1.0f)
         {
             transform.DOComplete();
-            transform.DOShakePosition(duration, 1,30);//  transform.localPosition, new Vector3(strength, strength, 0) , 0);
+            transform.DOShakePosition(duration, strength, 30);//  transform.localPosition, new Vector3(strength, strength, 0) , 0);
         }
     }
 }

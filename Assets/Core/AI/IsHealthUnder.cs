@@ -13,7 +13,7 @@ namespace Core.AI
         {
             var destructable = owner.GetComponent<Destructable>();
 
-            return destructable.CurrentHealth < HealthTreshold ?  TreeNodeState.Success :  TreeNodeState.Failed;
+            return destructable.CurrentHealth <= HealthTreshold ?  TreeNodeState.Success :  TreeNodeState.Failed;
         }
 
 

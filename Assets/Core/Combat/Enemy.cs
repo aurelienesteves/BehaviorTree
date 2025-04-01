@@ -72,8 +72,8 @@ namespace Core.Combat
         {
             IsDead = true;
 
-            if (animator != null)
-                animator.SetBool("IsDead", true);
+            //if (animator != null)
+            //    animator.SetBool("IsDead", true);
 
             if (customDeathSound != null)
                 SoundManager.Instance.PlaySoundAtLocation(customDeathSound, transform.position);
@@ -88,14 +88,14 @@ namespace Core.Combat
                 Destroy(gameObject);
         }
 
-        public virtual void Respawn(Vector2 position)
+        public virtual void Respawn()
         {
             destructable.Revive();
             IsDead = false;
-            transform.position = position;
+          //  transform.position = position;
 
-            if (animator != null)
-                animator.SetBool("IsDead", false);
+            //if (animator != null)
+            //    animator.SetBool("IsDead", false);
         }
 
         protected virtual void OnHitPlayer(Vector2 hitVelocity)

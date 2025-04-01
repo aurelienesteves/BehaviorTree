@@ -19,7 +19,10 @@ namespace Core.AI
         {
             if ( _currentNode != null)
             {
-                _currentNode.Update(this, gameObject);
+                if (_currentNode.Update(this, gameObject) != TreeNodeState.Running)
+                {
+                    _currentNode = null;
+                }
             }
             else
             {
