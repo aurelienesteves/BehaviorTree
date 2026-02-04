@@ -97,7 +97,7 @@ namespace Core.Character
                 controllable = value;
                 if (!controllable)
                 {
-                    body.velocity = new Vector2(0, body.velocity.y);
+                    body.linearVelocity = new Vector2(0, body.linearVelocity.y);
                     animator.SetFloat("Speed", 0);
                 }
             }
@@ -111,7 +111,7 @@ namespace Core.Character
                 blockingUI = value;
                 if (blockingUI)
                 {
-                    body.velocity = new Vector2(0, body.velocity.y);
+                    body.linearVelocity = new Vector2(0, body.linearVelocity.y);
                     animator.SetFloat("Speed", 0);
                 }
             }
@@ -210,9 +210,9 @@ namespace Core.Character
 
             // Horizontal Movement and climbing
             if (dashTimer > 0)
-                body.velocity = new Vector2(dashSpeed * facingDirection, body.velocity.y);
+                body.linearVelocity = new Vector2(dashSpeed * facingDirection, body.linearVelocity.y);
             else
-                body.velocity = Vector2.SmoothDamp(body.velocity, new Vector2(movingVelocityX, body.velocity.y),
+                body.linearVelocity = Vector2.SmoothDamp(body.linearVelocity, new Vector2(movingVelocityX, body.linearVelocity.y),
                     ref currentVelocity, 0.02f);
 
             UpdateAcceleration();
@@ -223,8 +223,8 @@ namespace Core.Character
             // Artificially limit horizontal and vertical velocity
             float downwardsLimit = -24.0f;
             float upwardsLimit = 14.0f;
-            body.velocity = new Vector2(Mathf.Clamp(body.velocity.x, -14.0f, 14.0f),
-                Mathf.Clamp(body.velocity.y, downwardsLimit, upwardsLimit));
+            body.linearVelocity = new Vector2(Mathf.Clamp(body.linearVelocity.x, -14.0f, 14.0f),
+                Mathf.Clamp(body.linearVelocity.y, downwardsLimit, upwardsLimit));
 
 
             HandleFalling();
@@ -289,7 +289,7 @@ namespace Core.Character
             {
                 isOnGround = true;
 
-                if (!wasOnGround && afterJumpCooldown <= 0 && body.velocity.y < 3.0f)
+                if (!wasOnGround && afterJumpCooldown <= 0 && body.linearVelocity.y < 3.0f)
                     HandleLanding();
             }
 
@@ -306,7 +306,7 @@ namespace Core.Character
         private void FinalCollisionCheck()
         {
             // Predict velocity in next physics step -> y value??
-            Vector2 moveDirection = new Vector2(body.velocity.x * Time.fixedDeltaTime, 0.02f);
+            Vector2 moveDirection = new Vector2(body.linearVelocity.x * Time.fixedDeltaTime, 0.02f);
 
             // Get bounds of Collider
             var topRight = new Vector2(collider.bounds.max.x, collider.bounds.max.y);
@@ -320,7 +320,7 @@ namespace Core.Character
             var hitCollider = Physics2D.OverlapArea(bottomLeft, topRight, environmentLayerMask);
             if (hitCollider != null)
             {
-                body.velocity = new Vector3(body.velocity.x * 0.2f, body.velocity.y, 0);
+                body.linearVelocity = new Vector3(body.linearVelocity.x * 0.2f, body.linearVelocity.y, 0);
                 animator.SetFloat(CharacterAnimations.Speed, 0);
             }
         }
@@ -384,7 +384,7 @@ namespace Core.Character
                 StartJump();
             }
 
-            if (!isOnGround && !isJumping && body.velocity.y > 0.01f)
+            if (!isOnGround && !isJumping && body.linearVelocity.y > 0.01f)
             {
                 CancelJump();
             }
@@ -403,12 +403,12 @@ namespace Core.Character
 
         private void CancelJump()
         {
-            body.velocity = new Vector2(body.velocity.x, body.velocity.y * 0.72f);
+            body.linearVelocity = new Vector2(body.linearVelocity.x, body.linearVelocity.y * 0.72f);
         }
 
         private void HandleFalling()
         {
-            if (body.velocity.y < -9.0f)
+            if (body.linearVelocity.y < -9.0f)
             {
                 camController.UpdateVertically();
             }
@@ -479,7 +479,7 @@ namespace Core.Character
         public void DoRecoil(Vector2 recoilForce, bool resetVelocity = false)
         {
             if (resetVelocity)
-                body.velocity = Vector3.zero;
+                body.linearVelocity = Vector3.zero;
 
             body.AddForce(recoilForce);
         }
