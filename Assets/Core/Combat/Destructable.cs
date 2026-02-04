@@ -1,5 +1,6 @@
-﻿using System;
+﻿using Unity.Behavior;
 using UnityEngine;
+using Action = System.Action;
 
 namespace Core.Combat
 {
@@ -12,11 +13,15 @@ namespace Core.Combat
 
         public event Action OnDestroyed;
 
+        private BehaviorGraphAgent _agent;
+
         protected override void Awake()
         {
             base.Awake();
             CurrentHealth = health;
             Invincible = false;
+
+            _agent = GetComponent<BehaviorGraphAgent>();
         }
 
         public override void OnAttackHit(Vector2 position, Vector2 force, int damage)
@@ -32,6 +37,9 @@ namespace Core.Combat
         public void DealDamage(int damage)
         {
             CurrentHealth -= damage;
+            
+            _agent?.BlackboardReference.SetVariableValue("Health", CurrentHealth);
+            
             if (CurrentHealth <= 0)
             {
                 OnDestroyed?.Invoke();
@@ -45,6 +53,8 @@ namespace Core.Combat
         internal void SetHealth(int health)
         {
             CurrentHealth = health;
+
+            _agent?.BlackboardReference.SetVariableValue("Health", CurrentHealth);
         }
     }
 }

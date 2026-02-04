@@ -1079,6 +1079,8 @@ MonoBehaviour:
   m_BlackboardVariableOverridesList:
   - rid: 606420344641421539
   - rid: 606420344641421540
+  - rid: 606420348594028901
+  - rid: 606420348594028902
   m_OriginalGraph: {fileID: 0}
   m_IsInitialised: 0
   m_IsStarted: 0
@@ -1101,6 +1103,22 @@ MonoBehaviour:
           m_Value1: 5405739233098444037
         Name: Player
         m_Value: {fileID: 2074650176}
+    - rid: 606420348594028901
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 10656253499615113079
+          m_Value1: 3687420264451178717
+        Name: HazardCollider
+        m_Value: {fileID: 1382244542}
+    - rid: 606420348594028902
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 6154447713523806306
+          m_Value1: 17027766402463486334
+        Name: MaggotTransform
+        m_Value: {fileID: 1515090379}
 --- !u!1 &936762855
 GameObject:
   m_ObjectHideFlags: 0
