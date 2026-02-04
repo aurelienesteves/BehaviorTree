@@ -16,7 +16,7 @@ public class MainGameplay : MonoBehaviour
 
     void Start()
     {
-        CreateBehavior();
+        //CreateBehavior();
     }
 
 
