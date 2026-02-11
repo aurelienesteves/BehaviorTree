@@ -1081,6 +1081,7 @@ MonoBehaviour:
   - rid: 606420344641421540
   - rid: 606420348594028901
   - rid: 606420348594028902
+  - rid: 606420508906095206
   m_OriginalGraph: {fileID: 0}
   m_IsInitialised: 0
   m_IsStarted: 0
@@ -1119,6 +1120,14 @@ MonoBehaviour:
           m_Value1: 17027766402463486334
         Name: MaggotTransform
         m_Value: {fileID: 1515090379}
+    - rid: 606420508906095206
+      type: {class: 'BlackboardVariable`1[[UnityEngine.Transform, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 13586297808173712763
+          m_Value1: 17042425592438307287
+        Name: WeaponTransform
+        m_Value: {fileID: 414289934}
 --- !u!1 &936762855
 GameObject:
   m_ObjectHideFlags: 0
