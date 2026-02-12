@@ -1082,6 +1082,7 @@ MonoBehaviour:
   - rid: 606420348594028901
   - rid: 606420348594028902
   - rid: 606420508906095206
+  - rid: 606420525542015370
   m_OriginalGraph: {fileID: 0}
   m_IsInitialised: 0
   m_IsStarted: 0
@@ -1128,6 +1129,14 @@ MonoBehaviour:
           m_Value1: 17042425592438307287
         Name: WeaponTransform
         m_Value: {fileID: 414289934}
+    - rid: 606420525542015370
+      type: {class: 'BlackboardVariable`1[[UnityEngine.BoxCollider2D, UnityEngine.Physics2DModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 13272960039568823472
+          m_Value1: 9511483948805082068
+        Name: RockSpawnArea
+        m_Value: {fileID: 1712115922}
 --- !u!1 &936762855
 GameObject:
   m_ObjectHideFlags: 0
